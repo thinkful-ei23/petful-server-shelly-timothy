@@ -114,7 +114,6 @@ app.delete('/api/cat/:name', (req, res, next) => {
 app.delete('/api/dog/:name', (req, res, next) => {
 	const { name } = req.params;
 	if (name.toLowerCase() === dog[0].name.toLowerCase()) {
-		// console.info(cat[0].name);
 		dog.splice(0, 1);
 		res.status(200).send({ message: `Congratulations on your adoption!` });
 	} else {
