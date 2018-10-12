@@ -7,6 +7,8 @@ const morgan = require('morgan');
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 // const {dbConnect} = require('./db-knex');
+const catRouter = require('./routes/cats');
+const dogRouter = require('./routes/dogs');
 
 const cat = [
 	{
@@ -81,14 +83,17 @@ const dog = [
 const app = express();
 
 app.use(
-	morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
-		skip: (req, res) => process.env.NODE_ENV === 'test'
+	cors({
+		origin: CLIENT_ORIGIN
 	})
 );
 
+app.use('/api', catRouter);
+app.use('/api', dogRouter);
+
 app.use(
-	cors({
-		origin: CLIENT_ORIGIN
+	morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
+		skip: (req, res) => process.env.NODE_ENV === 'test'
 	})
 );
 
