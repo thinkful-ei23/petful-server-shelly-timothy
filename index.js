@@ -7,24 +7,25 @@ const morgan = require('morgan');
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
 // const {dbConnect} = require('./db-knex');
-
-const app = express();
-const catRouter = require('./routes/cat');
+const catRouter = require('./routes/cats');
 const dogRouter = require('./routes/dogs');
 
-app.use(
-  morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
-    skip: (req, res) => process.env.NODE_ENV === 'test'
-  })
-);
+const app = express();
 
 app.use(
   cors({
     origin: CLIENT_ORIGIN
   })
 );
-app.use('/api/cat', catRouter);
-app.use('/api/dog', dogRouter);
+
+app.use('/api', catRouter);
+app.use('/api', dogRouter);
+
+app.use(
+  morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
+    skip: (req, res) => process.env.NODE_ENV === 'test'
+  })
+);
 
 function runServer(port = PORT) {
   const server = app
